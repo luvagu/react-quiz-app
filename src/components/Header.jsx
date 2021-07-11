@@ -1,19 +1,20 @@
-function Header({ categories, handleSubmit, handleChange }) {
+function Header({ categories, handleSubmit, handleChange, isLoading }) {
 	return (
 		<header>
 			<form onSubmit={handleSubmit}>
 				<div className='form-group'>
 					<label htmlFor='category'>Category</label>
-					<select
-						id='category'
-						onChange={handleChange}
-					>
-						{categories.map(category => (
-							<option value={category.id} key={category.id}>
-								{category.name}
-							</option>
-						))}
-					</select>
+					{isLoading ? (
+						<span>Loading categories...</span>
+					) : (
+						<select id='category' onChange={handleChange}>
+							{categories.map(category => (
+								<option value={category.id} key={category.id}>
+									{category.name}
+								</option>
+							))}
+						</select>
+					)}
 				</div>
 				<div className='form-group'>
 					<label htmlFor='difficulty'>Difficulty</label>

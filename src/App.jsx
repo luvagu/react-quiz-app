@@ -40,6 +40,7 @@ function App() {
 				categories={categories}
 				handleChange={handleChange}
 				handleSubmit={handleSubmit}
+				isLoading={isLoading}
 			/>
 			<div className='container'>
 				<CardsList flashcards={flashcards} />

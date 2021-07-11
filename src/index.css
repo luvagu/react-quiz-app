@@ -41,6 +41,11 @@ form {
 	margin-bottom: 0.25rem;
 }
 
+.form-group > span {
+	color: #777;
+	font-size: 0.75rem;
+}
+
 .btn {
 	background-color: hsl(200, 100%, 50%);
 	color: white;
