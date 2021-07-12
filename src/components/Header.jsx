@@ -1,10 +1,16 @@
-function Header({ categories, handleSubmit, handleChange, isLoading }) {
+function Header({
+	categories,
+	handleSubmit,
+	handleChange,
+	loadingCategories,
+	loadingQuestions,
+}) {
 	return (
 		<header>
 			<form onSubmit={handleSubmit}>
 				<div className='form-group'>
 					<label htmlFor='category'>Category</label>
-					{isLoading ? (
+					{loadingCategories ? (
 						<span>Loading categories...</span>
 					) : (
 						<select id='category' onChange={handleChange}>
@@ -34,19 +40,20 @@ function Header({ categories, handleSubmit, handleChange, isLoading }) {
 					</select>
 				</div>
 				<div className='form-group'>
-					<label htmlFor='amount'>Number of Questions</label>
+					<label htmlFor='amount'>Questions</label>
 					<input
 						type='number'
 						id='amount'
-						min='1'
-						step='1'
+						min='5'
+						step='5'
+						max='50'
 						defaultValue={10}
 						onChange={handleChange}
 					/>
 				</div>
 				<div className='form-group'>
-					<button className='btn' type='submit'>
-						Generate
+					<button className='btn' type='submit' disabled={loadingCategories}>
+						{loadingQuestions ? 'Loading...' : 'Generate Quiz'}
 					</button>
 				</div>
 			</form>

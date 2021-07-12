@@ -1,27 +1,35 @@
 import { Fragment, useEffect, useState } from 'react'
 import axios from 'axios'
-import CardsList from './components/CardsList'
 import Header from './components/Header'
+import Progress from './components/Progress'
+import Score from './components/Score'
+import Question from './components/Question'
 
-const decodeString = (string) => {
+const decodeString = string => {
 	const text = document.createElement('textarea')
 	text.innerHTML = string
 	return text.value
 }
 
+const calculatePercentage = (fraction, total) =>
+	Math.floor((fraction * 100) / total)
+
 /**
- * 
+ *
  * @todo
- * fix flip answer background
+ * fix flip answer background bug
  * add choose answer
- * add scores for correct and incorrect answers  
+ * add scores for correct and incorrect answers
  */
 
 function App() {
-	const [isLoading, setIsLoading] = useState(false)
+	const [loadingCategories, setLoadingCategories] = useState(false)
+	const [loadingQuestions, setLoadingQuestions] = useState(false)
 	const [categories, setCategories] = useState([])
-	const [flashcards, setFlashcards] = useState([])
+	const [questions, setQuestions] = useState([])
 	const [options, setOptions] = useState({ amount: '10' })
+
+	console.log(questions);
 
 	const handleChange = e => {
 		setOptions(prevOptions => ({
@@ -33,6 +41,7 @@ function App() {
 	const handleSubmit = async e => {
 		e.preventDefault()
 
+		setLoadingQuestions(true)
 		try {
 			const { data } = await axios({
 				method: 'GET',
@@ -40,26 +49,29 @@ function App() {
 				params: options,
 			})
 
-			setFlashcards(data.results.map((questionItem, index) => {
-        const answer = decodeString(questionItem.correct_answer)
-        const wrongAnswers = [
-          ...questionItem.incorrect_answers.map(a => decodeString(a)),
-          answer
-        ]
-        return {
-          id: `${index}-${Date.now()}`,
-          question: decodeString(questionItem.question),
-          answer: answer,
-          options: wrongAnswers.sort(() => Math.random() - .5)
-        }
-      }))
+			setQuestions(
+				data.results.map((questionItem, index) => {
+					const answer = decodeString(questionItem.correct_answer)
+					const wrongAnswers = [
+						...questionItem.incorrect_answers.map(a => decodeString(a)),
+						answer,
+					]
+					return {
+						id: `${index}-${Date.now()}`,
+						question: decodeString(questionItem.question),
+						answer: answer,
+						options: wrongAnswers.sort(() => Math.random() - 0.5),
+					}
+				})
+			)
 		} catch (error) {
 			console.log(error)
 		}
+		setLoadingQuestions(false)
 	}
 
 	useEffect(() => {
-		setIsLoading(true)
+		setLoadingCategories(true)
 		let cancel
 
 		axios({
@@ -69,12 +81,12 @@ function App() {
 		})
 			.then(({ data }) => {
 				setCategories(data.trivia_categories)
-				setIsLoading(false)
+				setLoadingCategories(false)
 			})
 			.catch(error => {
 				if (axios.isCancel(error)) return
 				console.log(error)
-				setIsLoading(false)
+				setLoadingCategories(false)
 			})
 
 		return () => cancel()
@@ -86,10 +98,20 @@ function App() {
 				categories={categories}
 				handleChange={handleChange}
 				handleSubmit={handleSubmit}
-				isLoading={isLoading}
+				loadingCategories={loadingCategories}
+				loadingQuestions={loadingQuestions}
 			/>
 			<div className='container'>
-				<CardsList flashcards={flashcards} />
+				<div className='flex-between'>
+					<Progress
+						questionNum={5}
+						totalQuestions={50}
+						percentage={calculatePercentage(3, 10)}
+					/>
+					<Score />
+				</div>
+				
+				<Question />
 			</div>
 		</Fragment>
 	)
