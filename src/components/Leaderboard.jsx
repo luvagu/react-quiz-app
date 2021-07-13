@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getPlayers } from '../utils/fauna.helpers'
 
 const mergeSortArray = arr => {
@@ -39,12 +39,14 @@ const groupMergeSortArray = array => {
 
 function Leaderboard({ setError }) {
 	const [leaderboard, setLeaderboard] = useState(null)
+	const [topScorer, setTopScorer] = useState('')
 
 	useEffect(() => {
 		;(async () => {
 			try {
 				const playerData = await getPlayers()
 				if (!playerData.length) return
+				setTopScorer(mergeSortArray(playerData)[0])
 				setLeaderboard(groupMergeSortArray(playerData))
 			} catch (error) {
 				console.log(error)
@@ -56,6 +58,14 @@ function Leaderboard({ setError }) {
 	return (
 		<div className='leaderboard'>
 			<h1>Leaderboard 🏆</h1>
+
+			{topScorer && (
+				<div className='leaderboard-group gold'>
+					<h3>Overall Top Scorer</h3>
+					<span>🥇 {topScorer.name} - {topScorer.score}</span>
+				</div>
+			)}
+
 			{leaderboard ? (
 				leaderboard.map(({ category, scores }) => (
 					<div key={category} className='leaderboard-group'>
