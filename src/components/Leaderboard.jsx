@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 const mergeAndSortArray = arr => {
 	const mergedEntriesIntoObject = arr.reduce((acc, val) => {
-		const key = val.playerName.toLowerCase()
+		const key = val.name.toLowerCase()
 		if (key in acc) {
 			acc[key] = { ...acc[key], score: acc[key].score + val.score }
 		} else {
@@ -30,12 +30,12 @@ function Leaderboard({ lsKey }) {
 			<h1>Leaderboard 🏆</h1>
 			<ul>
 				{leaderboard ? (
-					leaderboard.map((scores, idx) => (
-						<li key={scores.id}>
+					leaderboard.map((player, idx) => (
+						<li key={player.id}>
 							{idx === 0 && '🥇 '}
 							{idx === 1 && '🥈 '}
 							{idx === 2 && '🥉 '}
-							{scores.playerName} - {scores.score}
+							{player.name} - {player.score}
 						</li>
 					))
 				) : (

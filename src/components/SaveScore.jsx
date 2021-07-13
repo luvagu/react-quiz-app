@@ -10,7 +10,7 @@ function SaveScore({ score, lsKey, resetGame }) {
 
 		const currentLeaderboard = JSON.parse(localStorage.getItem(lsKey)) || null
 
-		const playerData = { id: Date.now(), playerName, score }
+		const playerData = { id: Date.now(), name: playerName.trim(), score }
 
 		localStorage.setItem(
 			lsKey,
@@ -32,7 +32,7 @@ function SaveScore({ score, lsKey, resetGame }) {
 						type='text'
 						value={playerName}
 						placeholder='Enter your name'
-						onChange={e => setPlayerName(e.target.value.trim())}
+						onChange={e => setPlayerName(e.target.value)}
 						required
 					/>
 					<button className='btn' type='submit'>

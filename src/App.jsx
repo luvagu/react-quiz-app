@@ -21,6 +21,7 @@ const calculatePercentage = (fraction, total) => {
 }
 
 function App() {
+	const [error, setError] = useState(false)
 	const [loadingCategories, setLoadingCategories] = useState(false)
 	const [loadingQuestions, setLoadingQuestions] = useState(false)
 	const [categories, setCategories] = useState([])
@@ -56,6 +57,7 @@ function App() {
 		e.preventDefault()
 
 		resetGame()
+		setError(false)
 
 		setLoadingQuestions(true)
 		try {
@@ -64,6 +66,12 @@ function App() {
 				url: 'https://opentdb.com/api.php',
 				params: { ...apiOptions },
 			})
+
+			if (!data.results.length) {
+				setError('🙁 No questions found with the selected options. please try again!')
+				setLoadingQuestions(false)
+				return
+			}
 
 			setQuestionsBank(
 				data.results.map((questionItem, index) => {
@@ -84,6 +92,7 @@ function App() {
 			setQuizInProgress(true)
 		} catch (error) {
 			console.log(error)
+			setError('Error loading questions from the API. Please try again later.')
 		}
 		setLoadingQuestions(false)
 	}
@@ -114,6 +123,8 @@ function App() {
 
 	useEffect(() => {
 		setLoadingCategories(true)
+		setError(false)
+
 		let cancel
 
 		axios({
@@ -129,6 +140,7 @@ function App() {
 				if (axios.isCancel(error)) return
 				console.log(error)
 				setLoadingCategories(false)
+				setError('Error loading categories from the API. Please try again later.')
 			})
 
 		return () => cancel()
@@ -160,6 +172,8 @@ function App() {
 			/>
 
 			<div className='container'>
+				{error && <div className='error-message'>{error}</div>}
+
 				{!quizInProgress && !totalQuestions && (
 					<Leaderboard lsKey={LS_SCORES_KEY} />
 				)}
