@@ -4,6 +4,8 @@ function Header({
 	handleChange,
 	loadingCategories,
 	loadingQuestions,
+	quizInProgress,
+	defaultNumOfQuestions,
 }) {
 	return (
 		<header>
@@ -45,15 +47,19 @@ function Header({
 						type='number'
 						id='amount'
 						min='5'
-						step='5'
 						max='50'
-						defaultValue={10}
+						step='5'
+						defaultValue={defaultNumOfQuestions}
 						onChange={handleChange}
 					/>
 				</div>
 				<div className='form-group'>
-					<button className='btn' type='submit' disabled={loadingCategories}>
-						{loadingQuestions ? 'Loading...' : 'Generate Quiz'}
+					<button
+						className='btn'
+						type='submit'
+						disabled={loadingCategories || quizInProgress}
+					>
+						{loadingQuestions ? 'Loading...' : quizInProgress ? 'Quiz in progress' : 'Generate New Quiz'}
 					</button>
 				</div>
 			</form>
