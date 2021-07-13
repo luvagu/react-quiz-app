@@ -11,7 +11,7 @@ This app works with the https://opentdb.com/api_config.php API that provides acc
 - Wrong and right answers highlighted after picking option.
 - 100 points per correct answer.
 - Able to save scores at the end of the quiz.
-- Scores leaderboard.
+- Scores leaderboard by category.
 - Scores are consolidated for repeated players.
 - Uses FaunaDB to save and retrieve players scores.
 
