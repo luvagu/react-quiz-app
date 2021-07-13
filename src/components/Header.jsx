@@ -15,7 +15,7 @@ function Header({
 					{loadingCategories ? (
 						<span>Loading categories...</span>
 					) : (
-						<select id='category' onChange={handleChange}>
+						<select id='category' onChange={handleChange} disabled={loadingCategories || quizInProgress}>
 							{categories.map(category => (
 								<option value={category.id} key={category.id}>
 									{category.name}
@@ -26,7 +26,7 @@ function Header({
 				</div>
 				<div className='form-group'>
 					<label htmlFor='difficulty'>Difficulty</label>
-					<select id='difficulty' defaultValue='any' onChange={handleChange}>
+					<select id='difficulty' defaultValue='any' onChange={handleChange} disabled={loadingCategories || quizInProgress}>
 						<option value='any'>Any Difficulty</option>
 						<option value='easy'>Easy</option>
 						<option value='medium'>Medium</option>
@@ -35,7 +35,7 @@ function Header({
 				</div>
 				<div className='form-group'>
 					<label htmlFor='type'>Type</label>
-					<select id='type' defaultValue='any' onChange={handleChange}>
+					<select id='type' defaultValue='any' onChange={handleChange} disabled={loadingCategories || quizInProgress}>
 						<option value='any'>Any Type</option>
 						<option value='multiple'>Multiple Choice</option>
 						<option value='boolean'>True / False</option>
@@ -51,6 +51,7 @@ function Header({
 						step='5'
 						defaultValue={defaultNumOfQuestions}
 						onChange={handleChange}
+						disabled={loadingCategories || quizInProgress}
 					/>
 				</div>
 				<div className='form-group'>

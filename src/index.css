@@ -68,6 +68,7 @@ header > form {
 .btn:disabled {
 	background-color: hsl(200, 100%, 70%);
 	color: lightslategrey;
+	cursor: not-allowed;
 }
 
 .container {
@@ -189,7 +190,7 @@ header > form {
 
 .question > p {
 	margin-bottom: 1rem;
-	/* position: relative; */
+	position: relative;
 }
 
 .loader {

@@ -25,7 +25,7 @@ function App() {
 	const [loadingCategories, setLoadingCategories] = useState(false)
 	const [loadingQuestions, setLoadingQuestions] = useState(false)
 	const [categories, setCategories] = useState([])
-	const [apiOptions, setApiOptions] = useState({ amount: '5' })
+	const [apiOptions, setApiOptions] = useState({ amount: '10' })
 	const [questionsBank, setQuestionsBank] = useState([])
 	const [currentQuestion, setCurrentQuestion] = useState(null)
 	const [questionNum, setQuestionNum] = useState(0)
