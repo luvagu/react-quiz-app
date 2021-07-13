@@ -13,6 +13,7 @@ This app works with the https://opentdb.com/api_config.php API that provides acc
 - Able to save scores at the end of the quiz.
 - Scores leaderboard.
 - Scores are consolidated for repeated players.
+- Uses FaunaDB to save and retrieve players scores.
 
 Try the demo at: https://luvagu.github.io/react-quiz-app/
 
