@@ -1,23 +1,22 @@
 import { Fragment, useState } from 'react'
+import { createPlayer } from '../utils/fauna.helpers'
 
-function SaveScore({ score, lsKey, resetGame }) {
+function SaveScore({ score, setError, resetGame }) {
 	const [playerName, setPlayerName] = useState('')
 
-	const saveScore = e => {
+	const saveScore = async e => {
 		e.preventDefault()
+		// setError(false)
 
-		if (!playerName || !score || !lsKey) return
+		if (!playerName || !score ) return
 
-		const currentLeaderboard = JSON.parse(localStorage.getItem(lsKey)) || null
-
-		const playerData = { id: Date.now(), name: playerName.trim(), score }
-
-		localStorage.setItem(
-			lsKey,
-			JSON.stringify(
-				currentLeaderboard ? [...currentLeaderboard, playerData] : [playerData]
-			)
-		)
+		try {
+			const response = await createPlayer({ name: playerName.trim(), score })
+			console.log(response)
+		} catch (error) {
+			console.log(error)
+			setError('🙁 Error saving player score.')
+		}
 
 		resetGame()
 	}

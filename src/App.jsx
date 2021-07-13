@@ -7,7 +7,7 @@ import Question from './components/Question'
 import Leaderboard from './components/Leaderboard'
 import SaveScore from './components/SaveScore'
 
-const LS_SCORES_KEY = 'reactQuizLeaderboard'
+// const LS_SCORES_KEY = 'reactQuizLeaderboard'
 
 const decodeString = string => {
 	const text = document.createElement('textarea')
@@ -34,7 +34,7 @@ function App() {
 	const [score, setScore] = useState(0)
 	const [quizInProgress, setQuizInProgress] = useState(false)
 	const [gameEnded, setGameEnded] = useState(false)
-
+	
 	const resetGame = () => {
 		setQuestionsBank([])
 		setCurrentQuestion(null)
@@ -57,7 +57,7 @@ function App() {
 		e.preventDefault()
 
 		resetGame()
-		setError(false)
+		// setError(false)
 
 		setLoadingQuestions(true)
 		try {
@@ -68,7 +68,9 @@ function App() {
 			})
 
 			if (!data.results.length) {
-				setError('🙁 No questions found with the selected options. please try again!')
+				setError(
+					'🙁 No questions found with the selected options. please try again!'
+				)
 				setLoadingQuestions(false)
 				return
 			}
@@ -92,7 +94,9 @@ function App() {
 			setQuizInProgress(true)
 		} catch (error) {
 			console.log(error)
-			setError('Error loading questions from the API. Please try again later.')
+			setError(
+				'🙁 Error loading questions from the API. Please try again later.'
+			)
 		}
 		setLoadingQuestions(false)
 	}
@@ -123,7 +127,7 @@ function App() {
 
 	useEffect(() => {
 		setLoadingCategories(true)
-		setError(false)
+		// setError(false)
 
 		let cancel
 
@@ -140,7 +144,9 @@ function App() {
 				if (axios.isCancel(error)) return
 				console.log(error)
 				setLoadingCategories(false)
-				setError('Error loading categories from the API. Please try again later.')
+				setError(
+					'🙁 Error loading categories from the API. Please try again later.'
+				)
 			})
 
 		return () => cancel()
@@ -153,11 +159,14 @@ function App() {
 
 	useEffect(() => {
 		if (!answers.length) return
-		const timeout = setTimeout(() => {
-			setNewScoreAndQuestionNum.current()
-		}, 3000)
+		const timeout = setTimeout(() => setNewScoreAndQuestionNum.current(), 3000)
 		return () => clearTimeout(timeout)
 	}, [answers])
+
+	useEffect(() => {
+		const timeout = setTimeout(() => setError(false), 5000)
+		return () => clearTimeout(timeout)
+	}, [error])
 
 	return (
 		<Fragment>
@@ -175,7 +184,7 @@ function App() {
 				{error && <div className='error-message'>{error}</div>}
 
 				{!quizInProgress && !totalQuestions && (
-					<Leaderboard lsKey={LS_SCORES_KEY} />
+					<Leaderboard setError={setError} />
 				)}
 
 				{currentQuestion && (
@@ -199,11 +208,7 @@ function App() {
 				)}
 
 				{gameEnded && (
-					<SaveScore
-						score={score}
-						lsKey={LS_SCORES_KEY}
-						resetGame={resetGame}
-					/>
+					<SaveScore score={score} setError={setError} resetGame={resetGame} />
 				)}
 			</div>
 		</Fragment>
