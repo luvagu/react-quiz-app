@@ -1,5 +1,5 @@
 import { Client, query } from 'faunadb'
-console.log(process.env.FAUNACLIENT)
+
 const client = new Client({ secret: process.env.REACT_APP_FAUNADB })
 
 const {
