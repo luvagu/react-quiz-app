@@ -7,8 +7,6 @@ import Question from './components/Question'
 import Leaderboard from './components/Leaderboard'
 import SaveScore from './components/SaveScore'
 
-// const LS_SCORES_KEY = 'reactQuizLeaderboard'
-
 const decodeString = string => {
 	const text = document.createElement('textarea')
 	text.innerHTML = string
@@ -24,9 +22,10 @@ function App() {
 	const [error, setError] = useState(false)
 	const [loadingCategories, setLoadingCategories] = useState(false)
 	const [loadingQuestions, setLoadingQuestions] = useState(false)
-	const [categories, setCategories] = useState([])
 	const [apiOptions, setApiOptions] = useState({ amount: '10' })
+	const [categories, setCategories] = useState([])
 	const [questionsBank, setQuestionsBank] = useState([])
+	const [currentCategory, setCurrentCategory] = useState('General Knowledge')
 	const [currentQuestion, setCurrentQuestion] = useState(null)
 	const [questionNum, setQuestionNum] = useState(0)
 	const [totalQuestions, setTotalQuestions] = useState(0)
@@ -34,9 +33,10 @@ function App() {
 	const [score, setScore] = useState(0)
 	const [quizInProgress, setQuizInProgress] = useState(false)
 	const [gameEnded, setGameEnded] = useState(false)
-	
+
 	const resetGame = () => {
 		setQuestionsBank([])
+		setCurrentCategory('General Knowledge')
 		setCurrentQuestion(null)
 		setQuestionNum(0)
 		setTotalQuestions(0)
@@ -57,7 +57,12 @@ function App() {
 		e.preventDefault()
 
 		resetGame()
-		// setError(false)
+
+		if (apiOptions.category) {
+			setCurrentCategory(
+				categories.find(category => category.id === parseInt(apiOptions.category)).name
+			)
+		}
 
 		setLoadingQuestions(true)
 		try {
@@ -127,7 +132,6 @@ function App() {
 
 	useEffect(() => {
 		setLoadingCategories(true)
-		// setError(false)
 
 		let cancel
 
@@ -208,7 +212,12 @@ function App() {
 				)}
 
 				{gameEnded && (
-					<SaveScore score={score} setError={setError} resetGame={resetGame} />
+					<SaveScore
+						category={currentCategory}
+						score={score}
+						setError={setError}
+						resetGame={resetGame}
+					/>
 				)}
 			</div>
 		</Fragment>

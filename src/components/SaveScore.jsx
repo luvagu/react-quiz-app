@@ -1,18 +1,16 @@
 import { Fragment, useState } from 'react'
 import { createPlayer } from '../utils/fauna.helpers'
 
-function SaveScore({ score, setError, resetGame }) {
+function SaveScore({ category, score, setError, resetGame }) {
 	const [playerName, setPlayerName] = useState('')
 
 	const saveScore = async e => {
 		e.preventDefault()
-		// setError(false)
 
-		if (!playerName || !score ) return
+		if (!playerName || !category || !score) return
 
 		try {
-			const response = await createPlayer({ name: playerName.trim(), score })
-			console.log(response)
+			await createPlayer({ category, name: playerName.trim(), score })
 		} catch (error) {
 			console.log(error)
 			setError('🙁 Error saving player score.')

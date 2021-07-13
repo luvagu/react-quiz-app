@@ -14,8 +14,6 @@ body {
 	height: 100vh;
 }
 
-
-
 header {
 	background-color: white;
 	box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3);
@@ -92,7 +90,7 @@ header > form {
 }
 
 .progress-conatiner {
-	flex-grow: 0.8;
+	flex-grow: 0.9;
 }
 
 .progress-conatiner,
@@ -128,6 +126,7 @@ header > form {
 .progress-bar {
 	height: 2rem;
 	background-color: hsl(200, 100%, 50%);
+	transition: 300ms;
 }
 
 .question {
@@ -135,7 +134,7 @@ header > form {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin-bottom: .5rem;
+	margin-bottom: 0.5rem;
 }
 
 .question > h2 {
@@ -215,6 +214,7 @@ header > form {
 	justify-content: center;
 	align-items: center;
 	max-width: 400px;
+	min-width: 350px;
 	margin: 0 auto;
 }
 
@@ -242,15 +242,32 @@ header > form {
 	margin-bottom: 1rem;
 }
 
-.leaderboard > ul {
+.leaderboard-group {
+	width: 100%;
+	padding: 0.5rem;
+	background-color: hsl(200, 100%, 80%);
+	border-radius: 0.5rem;
+	box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-group > h3 {
+	text-align: center;
+	margin-bottom: 0.5rem;
+}
+
+.leaderboard-group > ul {
 	padding: 0;
 	list-style-type: none;
 }
 
-.leaderboard > ul > li {
+.leaderboard-group > ul > li {
 	text-transform: uppercase;
 	font-weight: bold;
-	font-size: 1.3rem;
 	color: darkblue;
 	text-align: center;
+	margin-bottom: 0.3rem;
+}
+
+.leaderboard-group > ul > li:last-child {
+	margin-bottom: 0;
 }
