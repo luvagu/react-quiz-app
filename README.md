@@ -7,6 +7,7 @@ This app works with the https://opentdb.com/api_config.php API that provides acc
 ## Features
 - Choose questions by category, difficulty and type.
 - Set the desired number of questions for the quiz.
+- Optinally set a question timer for extra difficulty.
 - Quiz progress bar and live score.
 - Wrong and right answers highlighted after picking option.
 - 100 points per correct answer.
