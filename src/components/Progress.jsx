@@ -1,10 +1,18 @@
+import { useEffect, useRef } from 'react'
+
 function Progress({ questionNum, totalQuestions, percentage }) {
+	const progressRef = useRef()
+
+	useEffect(() => {
+		progressRef.current.style.setProperty('--progress', percentage)
+	}, [percentage])
+
 	return (
 		<div className='progress-conatiner'>
-			<div className='progress-text'>Question {questionNum} of {totalQuestions}</div>
-			<div className='progress-bar-box'>
-				<div className='progress-bar' style={{ width: `${percentage}%` }}></div>
+			<div className='progress-text'>
+				Question {questionNum} of {totalQuestions}
 			</div>
+			<div ref={progressRef} className='progress-bar'></div>
 		</div>
 	)
 }

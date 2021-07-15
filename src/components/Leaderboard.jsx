@@ -12,7 +12,7 @@ const mergeSortArray = arr => {
 		return acc
 	}, {})
 	const sortedArrayByHighScore = Object.values(mergedEntriesIntoObject).sort(
-		(a, b) => a.score < b.score
+		(a, b) => b.score - a.score
 	)
 	return sortedArrayByHighScore
 }
@@ -34,24 +34,31 @@ const groupMergeSortArray = array => {
 		merged.push({ category: key, scores: categoryMerged })
 	}
 
-	return merged
+	const sortedByCategoryNameAsc = merged.sort((a, b) => a.category > b.category)
+
+	return sortedByCategoryNameAsc
 }
 
 function Leaderboard({ setError }) {
+	const [isLoading, setIsLoading] = useState(false)
 	const [leaderboard, setLeaderboard] = useState(null)
 	const [topScorer, setTopScorer] = useState('')
 
 	useEffect(() => {
 		;(async () => {
+			setIsLoading(true)
 			try {
 				const playerData = await getPlayers()
-				if (!playerData.length) return
+				if (!playerData.length) {
+					return setIsLoading(false)
+				}
 				setTopScorer(mergeSortArray(playerData)[0])
 				setLeaderboard(groupMergeSortArray(playerData))
 			} catch (error) {
 				console.log(error)
 				setError('🙁 Error loading leaderboard.')
 			}
+			setIsLoading(false)
 		})()
 	}, [setError])
 
@@ -62,11 +69,13 @@ function Leaderboard({ setError }) {
 			{topScorer && (
 				<div className='leaderboard-group gold'>
 					<h3>Overall Top Scorer</h3>
-					<span>🥇 {topScorer.name} - {topScorer.score}</span>
+					<span>
+						🥇 {topScorer.name} - {topScorer.score}
+					</span>
 				</div>
 			)}
 
-			{leaderboard ? (
+			{leaderboard &&
 				leaderboard.map(({ category, scores }) => (
 					<div key={category} className='leaderboard-group'>
 						<h3>{category}</h3>
@@ -81,10 +90,11 @@ function Leaderboard({ setError }) {
 							))}
 						</ul>
 					</div>
-				))
-			) : (
-				<h3>No scores yet!</h3>
-			)}
+				))}
+
+			{isLoading && <h3>Loading leaderboard...</h3>}
+
+			{!leaderboard && !isLoading && <h3>No scores yet!</h3>}
 		</div>
 	)
 }

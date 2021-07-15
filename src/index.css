@@ -12,12 +12,13 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	counter-reset: options;
 	height: 100vh;
+	/* min-width: 450px; */
 }
 
 header {
 	background-color: white;
 	box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3);
-	padding: 0 1rem .4rem;
+	padding: 0 1rem 0.4rem;
 }
 
 header > form {
@@ -90,26 +91,9 @@ header > form {
 }
 
 .progress-conatiner {
-	flex-grow: 0.9;
-}
-
-.progress-conatiner,
-.score-container {
 	display: flex;
 	flex-direction: column;
-}
-
-.score-container {
-	align-items: center;
-}
-
-.score-text,
-.score-number {
-	font-weight: bold;
-}
-
-.score-number {
-	font-size: 2rem;
+	flex-grow: 0.8;
 }
 
 .progress-text {
@@ -117,16 +101,45 @@ header > form {
 	margin-bottom: 0.25rem;
 }
 
-.progress-bar-box {
+.progress-bar {
+	position: relative;
+	height: 2rem;
 	border: 1px solid hsl(200, 100%, 50%);
 	border-radius: 0.5rem;
 	overflow: hidden;
 }
 
-.progress-bar {
-	height: 2rem;
+.progress-bar::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	width: calc(1% * var(--progress, 0));
+	height: 100%;
 	background-color: hsl(200, 100%, 50%);
 	transition: 300ms;
+}
+
+.score-timer-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border: 1px solid hsl(200, 100%, 50%);
+}
+
+.score-timer-text {
+	background-color: hsl(200, 100%, 50%);
+	padding: 0 .3rem;
+}
+
+.score-timer-number {
+	font-size: 1.5rem;
+	font-weight: bold;
+	padding: 0 .3rem;
+}
+
+.score-timer-border {
+	border-right: 1px solid hsl(200, 100%, 50%)
 }
 
 .question {

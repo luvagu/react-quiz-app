@@ -22,7 +22,9 @@ function App() {
 	const [error, setError] = useState(false)
 	const [loadingCategories, setLoadingCategories] = useState(false)
 	const [loadingQuestions, setLoadingQuestions] = useState(false)
-	const [apiOptions, setApiOptions] = useState({ amount: '10' })
+	const [apiOptions, setApiOptions] = useState({ amount: '5' })
+	const [withTimer, setWithTimer] = useState(false)
+	const [timer, setTimer] = useState(0)
 	const [categories, setCategories] = useState([])
 	const [questionsBank, setQuestionsBank] = useState([])
 	const [currentCategory, setCurrentCategory] = useState('General Knowledge')
@@ -35,6 +37,7 @@ function App() {
 	const [gameEnded, setGameEnded] = useState(false)
 
 	const resetGame = () => {
+		setTimer(0)
 		setQuestionsBank([])
 		setCurrentCategory('General Knowledge')
 		setCurrentQuestion(null)
@@ -60,7 +63,9 @@ function App() {
 
 		if (apiOptions.category) {
 			setCurrentCategory(
-				categories.find(category => category.id === parseInt(apiOptions.category)).name
+				categories.find(
+					category => category.id === parseInt(apiOptions.category)
+				).name
 			)
 		}
 
@@ -115,16 +120,16 @@ function App() {
 
 	setNewScoreAndQuestionNum.current = () => {
 		let newScore = 0
+		
 		for (const answer of answers) {
-			if (answer.isCorrectAnswer) newScore += 100
+			if (answer !== null && answer.isCorrectAnswer) newScore += 100
 		}
+
 		setScore(newScore)
 
 		if (questionNum < totalQuestions) {
 			setCurrentQuestion(questionsBank[questionNum])
 			setQuestionNum(questionNum + 1)
-		} else {
-			setQuizInProgress(false)
 		}
 
 		if (questionNum === totalQuestions) setGameEnded(true)
@@ -141,7 +146,10 @@ function App() {
 			cancelToken: new axios.CancelToken(c => (cancel = c)),
 		})
 			.then(({ data }) => {
-				setCategories(data.trivia_categories)
+				const sortedByCategoryNameAsc = data.trivia_categories.sort(
+					(a, b) => a.name > b.name
+				)
+				setCategories(sortedByCategoryNameAsc)
 				setLoadingCategories(false)
 			})
 			.catch(error => {
@@ -163,7 +171,7 @@ function App() {
 
 	useEffect(() => {
 		if (!answers.length) return
-		const timeout = setTimeout(() => setNewScoreAndQuestionNum.current(), 3000)
+		const timeout = setTimeout(() => setNewScoreAndQuestionNum.current(), 1500)
 		return () => clearTimeout(timeout)
 	}, [answers])
 
@@ -178,6 +186,7 @@ function App() {
 				categories={categories}
 				handleChange={handleChange}
 				handleSubmit={handleSubmit}
+				setWithTimer={setWithTimer}
 				loadingCategories={loadingCategories}
 				loadingQuestions={loadingQuestions}
 				quizInProgress={quizInProgress}
@@ -199,7 +208,12 @@ function App() {
 								totalQuestions={totalQuestions}
 								percentage={calculatePercentage(questionNum, totalQuestions)}
 							/>
-							<Score score={score} />
+							<Score
+								question={currentQuestion}
+								score={score}
+								withTimer={withTimer}
+								timer={timer}
+							/>
 						</div>
 
 						<Question
@@ -207,6 +221,8 @@ function App() {
 							handleAnswers={handleAnswers}
 							lastQuestion={questionNum === totalQuestions}
 							gameEnded={gameEnded}
+							setTimer={setTimer}
+							withTimer={withTimer}
 						/>
 					</Fragment>
 				)}

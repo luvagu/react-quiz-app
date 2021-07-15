@@ -2,6 +2,7 @@ function Header({
 	categories,
 	handleSubmit,
 	handleChange,
+	setWithTimer,
 	loadingCategories,
 	loadingQuestions,
 	quizInProgress,
@@ -15,7 +16,12 @@ function Header({
 					{loadingCategories ? (
 						<span>Loading categories...</span>
 					) : (
-						<select id='category' onChange={handleChange} disabled={loadingCategories || quizInProgress}>
+						<select
+							id='category'
+							defaultValue='9'
+							onChange={handleChange}
+							disabled={loadingCategories || quizInProgress}
+						>
 							{categories.map(category => (
 								<option value={category.id} key={category.id}>
 									{category.name}
@@ -26,8 +32,13 @@ function Header({
 				</div>
 				<div className='form-group'>
 					<label htmlFor='difficulty'>Difficulty</label>
-					<select id='difficulty' defaultValue='any' onChange={handleChange} disabled={loadingCategories || quizInProgress}>
-						<option value='any'>Any Difficulty</option>
+					<select
+						id='difficulty'
+						defaultValue=''
+						onChange={handleChange}
+						disabled={loadingCategories || quizInProgress}
+					>
+						<option value=''>Any Difficulty</option>
 						<option value='easy'>Easy</option>
 						<option value='medium'>Medium</option>
 						<option value='hard'>Hard</option>
@@ -35,10 +46,29 @@ function Header({
 				</div>
 				<div className='form-group'>
 					<label htmlFor='type'>Type</label>
-					<select id='type' defaultValue='any' onChange={handleChange} disabled={loadingCategories || quizInProgress}>
-						<option value='any'>Any Type</option>
+					<select
+						id='type'
+						defaultValue=''
+						onChange={handleChange}
+						disabled={loadingCategories || quizInProgress}
+					>
+						<option value=''>Any Type</option>
 						<option value='multiple'>Multiple Choice</option>
 						<option value='boolean'>True / False</option>
+					</select>
+				</div>
+				<div className='form-group'>
+					<label htmlFor='timer'>Timer</label>
+					<select
+						id='timer'
+						defaultValue=''
+						onChange={e => setWithTimer(parseInt(e.target.value) === 0 ? false : parseInt(e.target.value))}
+						disabled={loadingCategories || quizInProgress}
+					>
+						<option value='0'>No</option>
+						<option value='5'>5s</option>
+						<option value='10'>10s</option>
+						<option value='15'>15s</option>
 					</select>
 				</div>
 				<div className='form-group'>
@@ -60,7 +90,11 @@ function Header({
 						type='submit'
 						disabled={loadingCategories || quizInProgress}
 					>
-						{loadingQuestions ? 'Loading...' : quizInProgress ? 'Quiz in progress' : 'Generate New Quiz'}
+						{loadingQuestions
+							? 'Loading...'
+							: quizInProgress
+							? 'Quiz in progress'
+							: 'Generate New Quiz'}
 					</button>
 				</div>
 			</form>
